@@ -46,6 +46,7 @@ public sealed class CoreToolsExtension : IExtension
 		PintaCore.PaintBrushes.AddPaintBrush (new Brushes.CircleBrush ());
 		PintaCore.PaintBrushes.AddPaintBrush (new Brushes.GridBrush ());
 		PintaCore.PaintBrushes.AddPaintBrush (new Brushes.PlainBrush (PintaCore.Workspace));
+		PintaCore.PaintBrushes.AddPaintBrush (new Brushes.SoftBrush ());
 		PintaCore.PaintBrushes.AddPaintBrush (new Brushes.SplatterBrush (services.GetService<ISettingsService> ()));
 		PintaCore.PaintBrushes.AddPaintBrush (new Brushes.SquaresBrush ());
 
@@ -71,8 +72,8 @@ public sealed class CoreToolsExtension : IExtension
 		PintaCore.Tools.AddTool (new EllipseTool (services));
 		PintaCore.Tools.AddTool (new RectangleTool (services));
 		PintaCore.Tools.AddTool (new RoundedRectangleTool (services));
-		//PintaCore.Tools.AddTool (new FreeformShapeTool (services));
-		//PintaCore.Tools.AddTool (new RecolorTool (services));
+		PintaCore.Tools.AddTool (new FreeformShapeTool (services));
+		PintaCore.Tools.AddTool (new RecolorTool (services));
 	}
 
 	public void Uninitialize ()
@@ -80,6 +81,7 @@ public sealed class CoreToolsExtension : IExtension
 		PintaCore.PaintBrushes.RemoveInstanceOfPaintBrush (typeof (Brushes.CircleBrush));
 		PintaCore.PaintBrushes.RemoveInstanceOfPaintBrush (typeof (Brushes.GridBrush));
 		PintaCore.PaintBrushes.RemoveInstanceOfPaintBrush (typeof (Brushes.PlainBrush));
+		PintaCore.PaintBrushes.RemoveInstanceOfPaintBrush (typeof (Brushes.SoftBrush));
 		PintaCore.PaintBrushes.RemoveInstanceOfPaintBrush (typeof (Brushes.SplatterBrush));
 		PintaCore.PaintBrushes.RemoveInstanceOfPaintBrush (typeof (Brushes.SquaresBrush));
 
@@ -100,11 +102,11 @@ public sealed class CoreToolsExtension : IExtension
 		PintaCore.Tools.RemoveInstanceOfTool<TextTool> ();
 		PintaCore.Tools.RemoveInstanceOfTool<LineCurveTool> ();
 		PintaCore.Tools.RemoveInstanceOfTool<RectangleTool> ();
-		//PintaCore.Tools.RemoveInstanceOfTool<RoundedRectangleTool> ();
+		PintaCore.Tools.RemoveInstanceOfTool<RoundedRectangleTool> ();
 		PintaCore.Tools.RemoveInstanceOfTool<EllipseTool> ();
 		PintaCore.Tools.RemoveInstanceOfTool<FreeformShapeTool> ();
 		PintaCore.Tools.RemoveInstanceOfTool<CloneStampTool> ();
-		//PintaCore.Tools.RemoveInstanceOfTool<RecolorTool> ();
+		PintaCore.Tools.RemoveInstanceOfTool<RecolorTool> ();
 	}
 	#endregion
 }
