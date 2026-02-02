@@ -3,7 +3,7 @@ using Cairo;
 using Pinta.Core;
 
 namespace Pinta.Tools.Brushes;
- 
+
 internal sealed class SoftBrush : BasePaintBrush
 {
 	public override string Name => Translations.GetString ("Soft");
@@ -30,7 +30,7 @@ internal sealed class SoftBrush : BasePaintBrush
 				currentSurface.Height);
 
 			maskContext = new Context (maskSurface);
-			maskContext.Operator = Operator.Add;
+			maskContext.Operator = Operator.Over;
 
 			dirty = RectangleI.Zero;
 		}
@@ -43,16 +43,17 @@ internal sealed class SoftBrush : BasePaintBrush
 		PointI to = strokeArgs.CurrentPosition;
 
 		double radius = g.LineWidth / 2.0;
-		double spacing = radius * 0.5;
+		double spacing = radius * 0.25;
 
 		double dx = to.X - from.X;
 		double dy = to.Y - from.Y;
 		double distance = Math.Sqrt (dx * dx + dy * dy);
 
-		// try to interpolate, spacing is half the brush size
+		// only draw the new segment
 		int steps = Math.Max (1, (int) Math.Ceiling (distance / spacing));
 
-		// surface was cleared, draw each stamp again
+		RectangleI segmentDirty = RectangleI.Zero;
+
 		for (int i = 0; i <= steps; i++) {
 			double t = i / (double) steps;
 			double x = from.X + dx * t;
@@ -60,13 +61,16 @@ internal sealed class SoftBrush : BasePaintBrush
 
 			StampMask (maskContext, x, y, radius);
 
-			// extend dirty to capture this stamp's rectangle
-			dirty = dirty.Union (new RectangleI (
+			// track this segment's dirty rectangle
+			segmentDirty = segmentDirty.Union (new RectangleI (
 				(int) (x - radius - 1),
 				(int) (y - radius - 1),
 				(int) (radius * 2 + 2),
 				(int) (radius * 2 + 2)));
 		}
+
+		// add this segment's dirty area to the total dirty area
+		dirty = dirty.Union (segmentDirty);
 
 		// preview
 		g.Save ();
@@ -76,6 +80,7 @@ internal sealed class SoftBrush : BasePaintBrush
 
 		return dirty;
 	}
+
 	private static void StampMask (
 		Context g,
 		double x,
@@ -91,12 +96,12 @@ internal sealed class SoftBrush : BasePaintBrush
 		// grad.AddColorStopRgba (1, 1, 1, 1, 0);
 
 		// so instead I eyed out a nicer looking alpha falloff
-		grad.AddColorStopRgba (0, 1, 1, 1, 0.4);
-		grad.AddColorStopRgba (0.1, 1, 1, 1, 0.35);
-		grad.AddColorStopRgba (0.25, 1, 1, 1, 0.3);
-		grad.AddColorStopRgba (0.5, 1, 1, 1, 0.2);
-		grad.AddColorStopRgba (0.92, 1, 1, 1, 0.015);
-		grad.AddColorStopRgba (0.97, 1, 1, 1, 0.005);
+		grad.AddColorStopRgba (0, 1, 1, 1, 0.2);
+		grad.AddColorStopRgba (0.1, 1, 1, 1, 0.175);
+		grad.AddColorStopRgba (0.25, 1, 1, 1, 0.15);
+		grad.AddColorStopRgba (0.5, 1, 1, 1, 0.1);
+		grad.AddColorStopRgba (0.92, 1, 1, 1, 0.0075);
+		grad.AddColorStopRgba (0.97, 1, 1, 1, 0.0025);
 		grad.AddColorStopRgba (1, 1, 1, 1, 0);
 
 		g.Save ();
