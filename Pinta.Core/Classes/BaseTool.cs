@@ -354,7 +354,7 @@ public abstract class BaseTool
 		}
 	}
 
-	private ToolBarDropDownButton AntialiasingDropDown {
+	protected ToolBarDropDownButton AntialiasingDropDown {
 		get {
 			if (antialiasing_button is null) {
 				antialiasing_button = new ToolBarDropDownButton ();

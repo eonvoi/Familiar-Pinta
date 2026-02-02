@@ -30,6 +30,7 @@ using System.Linq;
 using Cairo;
 using Gtk;
 using Pinta.Core;
+using Pinta.Tools.Brushes;
 
 namespace Pinta.Tools;
 
@@ -264,6 +265,10 @@ public sealed class PaintBrushTool : BaseBrushTool
 	{
 		brush_specific_options_box.RemoveAll ();
 		if (active_brush is not null) {
+			// SoftBrush specific: the name "soft brush" already implies there's a alpha falloff
+			// the SoftBrush implementation doesn't care about `SettingNames.ToolAntialias (this)` calls
+			AntialiasingDropDown.Visible = active_brush is not SoftBrush;
+
 			foreach (var option in active_brush.Options) {
 				brush_specific_options_box.Append (ToolOptionWidgetService.GetWidgetForOption (option));
 			}
