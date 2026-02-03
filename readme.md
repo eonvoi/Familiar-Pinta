@@ -14,7 +14,7 @@
 ### Changes made
 Generally, I'm trying to make this fork's layout as similar to Paint.NET as possible.<br>
 I know for a fact my code would never get accepted into the original project, but nevertheless:
-- The `Tooblox` is now 2 columns wide, just like Paint.NET
+- The `Toolbox` is now 2 columns wide, just like Paint.NET
 - The Tools inside the `Toolbox` were re-ordered to match that of Paint.NET 5.1.11
 - Reorganized menus and submenus
   - Moved "File", "Edit" and "Layers" from the `Menu Button`'s popup directly next to "View, Image, ...", in the header
